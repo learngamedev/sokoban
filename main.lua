@@ -3,6 +3,12 @@ require("src/Dependencies")
 function love.load()
     -- Keyboard input handler
     love.keyboard.keysPressed = {}
+
+    gTextures = {
+        ["tilesheet"] = love.graphics.newImage("assets/sokoban_tilesheet.png")
+    }
+
+    gFrames = generateQuads("tilesheet", 64, 64)
 end
 
 function love.draw()
