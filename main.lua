@@ -23,4 +23,7 @@ function love.update(dt)
 
     -- Reset keyboard input
     love.keyboard.keysPressed = {}
+
+    -- Auto-swapping changed lua files
+    require("lib/lurker").update()
 end
