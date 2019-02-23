@@ -15,9 +15,9 @@ end
 function generateQuads(textureName, tileWidth, tileHeight)
     local quads = {}
     local textureWidth, textureHeight = gTextures.tilesheet:getWidth(), gTextures.tilesheet:getHeight()
-    for i = 1, textureWidth / tileWidth do
+    for i = 1, textureHeight / tileHeight do
         table.insert(quads, {})
-        for j = 1, textureHeight / tileHeight do
+        for j = 1, textureWidth / tileWidth do
             table.insert(
                 quads[i],
                 love.graphics.newQuad((j - 1) * tileWidth, (i - 1) * tileHeight, 64, 64, textureWidth, textureHeight)
