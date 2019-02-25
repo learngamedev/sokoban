@@ -1,7 +1,7 @@
 ---@class Level
 Level = Class{}
 
-local MAP = {
+MAP = {
     ["wall"] = 0,
     ["floor"] = 1,
     ["box"] = 2,
