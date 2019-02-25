@@ -10,3 +10,4 @@ require("src/Utils")
 require("src/States/BaseState")
 
 require("src/Player")
+require("src/Level")
