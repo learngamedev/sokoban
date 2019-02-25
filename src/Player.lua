@@ -28,6 +28,8 @@ function Player:init(row, column, level)
     self._carried = {
         box = nil
     }
+
+    self._standingOn = MAP.floor
 end
 
 function Player:render()
@@ -57,9 +59,10 @@ end
 function Player:movement()
     if (love.keyboard.wasPressed("right")) then
         if (self:isMovable(self._row, self._column + 1)) then
-            self._level._tileMap[self._row][self._column] = 1
+            self._level._tileMap[self._row][self._column] = self._standingOn
             self._column = self._column + 1
             self:setPositions()
+            self._standingOn = self._level._tileMap[self._row][self._column]
             self._level._tileMap[self._row][self._column] = 3
             self._facing = "right"
 
@@ -67,9 +70,10 @@ function Player:movement()
         end
     elseif (love.keyboard.wasPressed("left")) then
         if (self:isMovable(self._row, self._column - 1)) then
-            self._level._tileMap[self._row][self._column] = 1
+            self._level._tileMap[self._row][self._column] = self._standingOn
             self._column = self._column - 1
             self:setPositions()
+            self._standingOn = self._level._tileMap[self._row][self._column]
             self._level._tileMap[self._row][self._column] = 3
             self._facing = "left"
 
@@ -79,9 +83,10 @@ function Player:movement()
 
     if (love.keyboard.wasPressed("up")) then
         if (self:isMovable(self._row - 1, self._column)) then
-            self._level._tileMap[self._row][self._column] = 1
+            self._level._tileMap[self._row][self._column] = self._standingOn
             self._row = self._row - 1
             self:setPositions()
+            self._standingOn = self._level._tileMap[self._row][self._column]
             self._level._tileMap[self._row][self._column] = 3
             self._facing = "up"
 
@@ -89,9 +94,10 @@ function Player:movement()
         end
     elseif (love.keyboard.wasPressed("down")) then
         if (self:isMovable(self._row + 1, self._column)) then
-            self._level._tileMap[self._row][self._column] = 1
+            self._level._tileMap[self._row][self._column] = self._standingOn
             self._row = self._row + 1
             self:setPositions()
+            self._standingOn = self._level._tileMap[self._row][self._column]
             self._level._tileMap[self._row][self._column] = 3
             self._facing = "down"
 
@@ -118,7 +124,7 @@ function Player:facing()
 end
 
 function Player:isMovable(row, column)
-    if (self._level._tileMap[row][column] == 1) then
+    if (self._level._tileMap[row][column] == 1 or self._level._tileMap[row][column] == 4) then
         return true
     end
     return false
