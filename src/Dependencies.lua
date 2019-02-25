@@ -8,3 +8,5 @@ require("src/Constants")
 require("src/Utils")
 
 require("src/States/BaseState")
+
+require("src/Player")
