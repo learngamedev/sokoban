@@ -1,11 +1,12 @@
 ---@class Player
 Player = Class {}
 
-function Player:init(row, column, levelMap)
+---@param level Level
+function Player:init(row, column, level)
     self._row, self._column = row, column
     self:setPositions(row, column)
 
-    self._levelMap = levelMap
+    self._level = level
 
     self._frames = {
         ["down"] = gFrames[5][1],
@@ -33,8 +34,8 @@ function Player:render()
     love.graphics.draw(gTextures.tilesheet, self._frames[self._facing], self._x, self._y)
 
     if
-        (self._levelMap[self._highlighting.row][self._highlighting.column] == 1 or
-            self._levelMap[self._highlighting.row][self._highlighting.column] == 4)
+        (self._level._tileMap[self._highlighting.row][self._highlighting.column] == 1 or
+            self._level._tileMap[self._highlighting.row][self._highlighting.column] == 4)
      then
         if (not self._carrying) then
             love.graphics.draw(gTextures.tilesheet, gFrames[4][1], self._highlighting.x, self._highlighting.y)
@@ -56,20 +57,20 @@ end
 function Player:movement()
     if (love.keyboard.wasPressed("right")) then
         if (self:isMovable(self._row, self._column + 1)) then
-            self._levelMap[self._row][self._column] = 1
+            self._level._tileMap[self._row][self._column] = 1
             self._column = self._column + 1
             self:setPositions()
-            self._levelMap[self._row][self._column] = 3
+            self._level._tileMap[self._row][self._column] = 3
             self._facing = "right"
 
             self:setHighlighting()
         end
     elseif (love.keyboard.wasPressed("left")) then
         if (self:isMovable(self._row, self._column - 1)) then
-            self._levelMap[self._row][self._column] = 1
+            self._level._tileMap[self._row][self._column] = 1
             self._column = self._column - 1
             self:setPositions()
-            self._levelMap[self._row][self._column] = 3
+            self._level._tileMap[self._row][self._column] = 3
             self._facing = "left"
 
             self:setHighlighting()
@@ -78,20 +79,20 @@ function Player:movement()
 
     if (love.keyboard.wasPressed("up")) then
         if (self:isMovable(self._row - 1, self._column)) then
-            self._levelMap[self._row][self._column] = 1
+            self._level._tileMap[self._row][self._column] = 1
             self._row = self._row - 1
             self:setPositions()
-            self._levelMap[self._row][self._column] = 3
+            self._level._tileMap[self._row][self._column] = 3
             self._facing = "up"
 
             self:setHighlighting()
         end
     elseif (love.keyboard.wasPressed("down")) then
         if (self:isMovable(self._row + 1, self._column)) then
-            self._levelMap[self._row][self._column] = 1
+            self._level._tileMap[self._row][self._column] = 1
             self._row = self._row + 1
             self:setPositions()
-            self._levelMap[self._row][self._column] = 3
+            self._level._tileMap[self._row][self._column] = 3
             self._facing = "down"
 
             self:setHighlighting()
@@ -117,7 +118,7 @@ function Player:facing()
 end
 
 function Player:isMovable(row, column)
-    if (self._levelMap[row][column] == 1) then
+    if (self._level._tileMap[row][column] == 1) then
         return true
     end
     return false
@@ -149,24 +150,26 @@ end
 function Player:interact()
     if (not self._carrying) then
         -- If is box, pick it up
-        if (self._levelMap[self._highlighting.row][self._highlighting.column] == 2) then
-            self._levelMap[self._highlighting.row][self._highlighting.column] = 1
+        if (self._level._tileMap[self._highlighting.row][self._highlighting.column] == 2) then
+            self._level._tileMap[self._highlighting.row][self._highlighting.column] = 1
             self._carrying = true
-        elseif (self._levelMap[self._highlighting.row][self._highlighting.column] == 5) then
+        elseif (self._level._tileMap[self._highlighting.row][self._highlighting.column] == 5) then
             -- If is completed goal, pick box up and recalc goals
-            self._levelMap[self._highlighting.row][self._highlighting.column] = 4
+            self._level._tileMap[self._highlighting.row][self._highlighting.column] = 4
             self._carrying = true
+            self._level._numOfGoals = self._level._numOfGoals + 1
         end
     else
         -- If is empty, put box down
-        if (self._levelMap[self._highlighting.row][self._highlighting.column] == 1) then
-            self._levelMap[self._highlighting.row][self._highlighting.column] = 2
+        if (self._level._tileMap[self._highlighting.row][self._highlighting.column] == 1) then
+            self._level._tileMap[self._highlighting.row][self._highlighting.column] = 2
             self._carrying = false
         end
         -- If is goal, complete it
-        if (self._levelMap[self._highlighting.row][self._highlighting.column] == 4) then
-            self._levelMap[self._highlighting.row][self._highlighting.column] = 5
+        if (self._level._tileMap[self._highlighting.row][self._highlighting.column] == 4) then
+            self._level._tileMap[self._highlighting.row][self._highlighting.column] = 5
             self._carrying = false
+            self._level._numOfGoals = self._level._numOfGoals - 1
         end
     end
 end

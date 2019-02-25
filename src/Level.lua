@@ -14,7 +14,7 @@ function Level:init(tileMap, playerR, playerC, numOfGoals)
     self._tileMap = tileMap
     
     self._tileMap[playerR][playerC] = 3
-    self._player = Player(playerR, playerC, tileMap)
+    self._player = Player(playerR, playerC, self)
 
     self._numOfGoals = numOfGoals
 end
